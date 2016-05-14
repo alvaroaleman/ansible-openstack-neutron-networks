@@ -23,13 +23,13 @@ a per project basis.
       adminproject:
         - name: "{{ external_netname }}"
           provider_network_name: extnet
+          provider_network_type: flat                # Defaults to 'flat'
+          enable_dhcp: false
           allocation_pool:
             start: '192.168.0.70'
             end: '192.168.0.99'
-          enable_dhcp: false
-          gateway_ip: '102.168.0.1'
+          gateway_ip: '192.168.0.1'
           cidr: '192.168.0.0/24'
-          external: True
           dns_nameservers:
             - '8.8.8.8'
       project1:
