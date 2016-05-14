@@ -28,12 +28,12 @@
 - name: Create external networks
   tags: neutron
   with_items: "{{ neutron_external_networks }}"
-  when: "{{ (neutron_registered_external_networks.results|selectattr('item', 'equalto', item.name)|list|first).stdout_lines|string == '0' }}"
+  when: "{{ (neutron_registered_external_networks.results|selectattr('item.name', 'equalto', item.name)|list|first).stdout_lines|length == 0 }}"
   command:
     neutron
       --os-username {{ neutron_auth.username }}
-      --os-password {{ neutros_auth.password }}
-      --os-auth-url {{ neutros_auth.auth_url }}
+      --os-password {{ neutron_auth.password }}
+      --os-auth-url {{ neutron_auth.auth_url }}
       --os-tenant-name {{ neutron_auth.project_name }}
       net-create {{ item.name }}
         --provider:network_type {{ item.provider_network_type|default('flat')}}
@@ -62,7 +62,7 @@
     enable_dhcp: "{{ item.enable_dhcp|default(omit)}}"
     gateway_ip: "{{ item.gateway_ip|default(omit)}}"
 
-- name: Create routerport
+- name: Create routerports
   tags: neutron
   with_items: "{{ neutron_internal_networks }}"
   when: "{{ item.external_netname is defined }}"
