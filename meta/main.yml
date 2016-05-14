@@ -1,0 +1,17 @@
+galaxy_info:
+  author: Alvaro Aleman
+  description: A role to idempotently configure neutron networks, subnets and routers on a per project basis
+  license: AGPLv3
+
+  min_ansible_version: 2.0
+  platforms:
+    - name: GenericLinux
+     versions:
+     - all
+     - any
+
+  galaxy_tags:
+    - openstack
+    - neutron
+
+dependencies: []
