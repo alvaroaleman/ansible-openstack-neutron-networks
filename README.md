@@ -9,10 +9,6 @@ a per project basis.
 - hosts: localhost
   gather_facts: false
   vars:
-    # Creation of external networks will be delegated to this host
-    # because currently the os_network module doesn't allow
-    # specifying a provider_network
-    os_cli_host: openstack_master
     os_auth:
       adminproject:
         username: adminproject_user
@@ -51,9 +47,15 @@ a per project basis.
 
 ## Requirements
 
-Target host must have the [python shade libraries](https://github.com/openstack-infra/shade/tree/master/shade) installed.
+* [Python shade libraries](https://github.com/openstack-infra/shade/tree/master/shade)
+* [Openstack cli tools](http://docs.openstack.org/cli-reference/common/cli_install_openstack_command_line_clients.html)
 
-``os_cli_host`` must have the [Openstack cli tools](http://docs.openstack.org/cli-reference/common/cli_install_openstack_command_line_clients.html) installed.
+E.g. for Fedora:
+
+```bash
+sudo dnf copr enable larsks/python-shade
+sudo dnf install python-shade python-openstackclient
+```
 
 ## License
 
