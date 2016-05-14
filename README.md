@@ -24,7 +24,7 @@ a per project basis.
         auth_url: https://10.10.0.39:5000/v2.0
     external_netname: 'physnet'
     os_networks:
-    adminproject:
+      adminproject:
         - name: "{{ external_netname }}"
           provider_network_name: extnet
           allocation_pool:
