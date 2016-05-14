@@ -22,7 +22,7 @@
       --os-username {{ neutron_auth.username }}
       --os-password {{ neutron_auth.password }}
       --os-auth-url {{ neutron_auth.auth_url }}
-      --os-project-name {{ neutron_auth.project_name }}
+      --os-tenant-name {{ neutron_auth.project_name }}
       net-list --name {{ item.name }} -c name -f value
 
 - name: Create external networks
@@ -34,7 +34,7 @@
       --os-username {{ neutron_auth.username }}
       --os-password {{ neutros_auth.password }}
       --os-auth-url {{ neutros_auth.auth_url }}
-      --os-project-name {{ neutron_auth.project_name }}
+      --os-tenant-name {{ neutron_auth.project_name }}
       net-create {{ item.name }}
         --provider:network_type {{ item.provider_network_type|default('flat')}}
         --provider:physical_network {{ item.provider_network_name }}
