@@ -1,3 +1,4 @@
+---
 - name: Set fact project
   tags: neutron
   set_fact:
@@ -9,7 +10,7 @@
   tags: neutron
   with_items: "{{ networks }}"
   os_network:
-    auth: "{{ auth[project] }}"
+    auth: "{{ os_auth[project] }}"
     name: "{{ item.name }}"
     external: False
 
@@ -17,7 +18,7 @@
   tags: neutron
   with_items: "{{ subnets }}"
   os_subnet:
-    auth: "{{ auth[project] }}"
+    auth: "{{ os_auth[project] }}"
     name: "{{ item.name ~ '_subnet'}}"
     network_name: "{{ item.name }}"
     allocation_pool_start:  "{{ item.allocation_pool.start }}"
@@ -32,7 +33,7 @@
   with_items: "{{ networks }}"
   when: "{{ item.external_netname is defined }}"
   os_router:
-    auth: "{{ auth[project] }}"
+    auth: "{{ os_auth[project] }}"
     # Must be site unique.....
     name: "{{ project ~ '_router_' ~ item.external_netname }}"
     network: "{{ item.external_netname }}"

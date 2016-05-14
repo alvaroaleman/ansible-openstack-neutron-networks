@@ -1,5 +1,5 @@
 ---
 - name: Create networks
   tags: neutron
-  with_dict: "{{ networks }}"
+  with_dict: "{{ os_networks }}"
   include: networks.yml
