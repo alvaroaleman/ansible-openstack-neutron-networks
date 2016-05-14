@@ -9,15 +9,11 @@ a per project basis.
 - hosts: localhost
   gather_facts: false
   vars:
+    # User must have permissions on all projects you want to manage networks for
     os_auth:
-      adminproject:
-        username: adminproject_user
-        password: adminproject_userpass
-        auth_url: https://10.10.0.39:5000/v2.0
-      project1:
-        username: project1_user
-        password: project1_userpass
-        auth_url: https://10.10.0.39:5000/v2.0
+      username: admin
+      password: adminpw
+      auth_url: https://10.10.0.39:5000/v2.0
     external_netname: 'physnet'
     os_networks:
       adminproject:

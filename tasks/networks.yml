@@ -2,7 +2,11 @@
 - name: Set facts
   tags: neutron
   set_fact:
-    neutron_project: "{{ item.key }}"
+    neutron_auth:
+      username: "{{ os_auth.username }}"
+      password: "{{ os_auth.password }}"
+      auth_url: "{{ os_auth.auth_url }}"
+      project_name: "{{ item.key }}"
     neutron_internal_networks: "{{ item.value|rejectattr('provider_network_name', 'defined')|list }}"
     neutron_external_networks: "{{ item.value|selectattr('provider_network_name', 'defined')|list }}"
     neutron_subnets: "{{ item.value }}"
@@ -15,9 +19,10 @@
   with_items: "{{ neutron_external_networks }}"
   command:
     neutron
-      --os-username {{ os_auth[neutron_project].username }}
-      --os-password {{ os_auth[neutron_project].password }}
-      --os-auth-url {{ os_auth[neutron_project].auth_url }}
+      --os-username {{ neutron_auth.username }}
+      --os-password {{ neutron_auth.password }}
+      --os-auth-url {{ neutron_auth.auth_url }}
+      --os-project-name {{ neutron_auth.project_name }}
       net-list --name {{ item.name }} -c name -f value
 
 - name: Create external networks
@@ -26,9 +31,10 @@
   when: "{{ (neutron_registered_external_networks.results|selectattr('item', 'equalto', item.name)|list|first).stdout_lines|string == '0' }}"
   command:
     neutron
-      --os-username {{ os_auth[neutron_project].username }}
-      --os-password {{ os_auth[neutron_project].password }}
-      --os-auth-url {{ os_auth[neutron_project].auth_url }}
+      --os-username {{ neutron_auth.username }}
+      --os-password {{ neutros_auth.password }}
+      --os-auth-url {{ neutros_auth.auth_url }}
+      --os-project-name {{ neutron_auth.project_name }}
       net-create {{ item.name }}
         --provider:network_type {{ item.provider_network_type|default('flat')}}
         --provider:physical_network {{ item.provider_network_name }}
@@ -38,7 +44,7 @@
   tags: neutron
   with_items: "{{ neutron_internal_networks }}"
   os_network:
-    auth: "{{ os_auth[neutron_project] }}"
+    auth: "{{ neutron_auth }}"
     name: "{{ item.name }}"
     external: False
 
@@ -46,7 +52,7 @@
   tags: neutron
   with_items: "{{ neutron_subnets }}"
   os_subnet:
-    auth: "{{ os_auth[neutron_project] }}"
+    auth: "{{ neutron_auth }}"
     name: "{{ item.name ~ '_subnet'}}"
     network_name: "{{ item.name }}"
     allocation_pool_start:  "{{ item.allocation_pool.start }}"
@@ -61,8 +67,8 @@
   with_items: "{{ neutron_internal_networks }}"
   when: "{{ item.external_netname is defined }}"
   os_router:
-    auth: "{{ os_auth[neutron_project] }}"
+    auth: "{{ neutron_auth }}"
     # Must be site unique.....
-    name: "{{ project ~ '_router_' ~ item.external_netname }}"
+    name: "{{ neutron_auth.project_name ~ '_router_' ~ item.external_netname }}"
     network: "{{ item.external_netname }}"
     interfaces: "{{ item.name ~ '_subnet'}}"
