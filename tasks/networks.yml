@@ -3,8 +3,8 @@
   tags: neutron
   set_fact:
     neutron_project: "{{ item.key }}"
-    neutron_internal_networks: "{{ item.value|default([])|rejectattr('provider_network_name', 'defined')|list }}"
-    neutron_external_networks: "{{ item.value|default([])|selectattr('provider_network_name', 'defined')|list }}"
+    neutron_internal_networks: "{{ item.value|rejectattr('provider_network_name', 'defined')|list }}"
+    neutron_external_networks: "{{ item.value|selectattr('provider_network_name', 'defined')|list }}"
     neutron_subnets: "{{ item.value }}"
 
 - name: Check state for external networks
