@@ -22,13 +22,20 @@ a per project basis.
           provider_network_type: flat                # Defaults to 'flat'
           subnets:
             - cidr: '192.168.0.0/24'
-              enable_dhcp: false
+              enable_dhcp: false                     # Defaults to 'omit'
+              gateway_ip: '192.168.0.1'              # Defaults to 'omit'
               allocation_pool:
                 start: '192.168.0.70'
                 end: '192.168.0.99'
-              gateway_ip: '192.168.0.1'
-              dns_nameservers:
+              dns_nameservers:                       # Defaults to 'omit'
                 - '8.8.8.8'
+            - cidr: '2001:db8:cafe:1e::/64'
+              ip_version: '6'                        # Defaults to 'omit'
+              enable_dhcp: false
+              gateway_ip: '2001:db8:cafe:1e::1'
+              allocation_pool:
+                start: '2001:db8:cafe:1e::2'
+                end: '2001:db8:cafe:1e:ffff:ffff:ffff:fffe'
       project1:
         - name: privnet
           external_netname: "{{ external_netname }}"
@@ -39,6 +46,11 @@ a per project basis.
                 end: '10.0.0.254'
               dns_nameservers:
                 - 8.8.8.8
+            - cidr: '2002:db8:cafe:1e::/64'
+              ip_version: '6'
+              allocation_pool:
+                start: '2002:db8:cafe:1e::2'
+                end: '2002:db8:cafe:1e:ffff:ffff:ffff:fffe'
   roles:
     - alvaroaleman.openstack-neutron-networks
 ```
