@@ -54,6 +54,8 @@ This role creates networks, subnets and routers. If a network has the attribute
                 - 8.8.8.8
             - cidr: '2002:db8:cafe:1e::/64'
               ip_version: '6'
+              ipv6_address_mode: slaac               # Defaults to 'omit'
+              ipv6_ra_mode: slaac                    # Defaults to 'omit'
               allocation_pool:
                 start: '2002:db8:cafe:1e::2'
                 end: '2002:db8:cafe:1e:ffff:ffff:ffff:fffe'

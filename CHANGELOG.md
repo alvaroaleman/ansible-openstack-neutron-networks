@@ -1,3 +1,9 @@
+# 1.1.1
+
+
+* Allow configuring ipv6_{address,router}_mode
+
+Alvaro Aleman (1):
 # 1.1.0
 
 
