@@ -7,9 +7,9 @@
       password: "{{ os_auth.password }}"
       auth_url: "{{ os_auth.auth_url }}"
       project_name: "{{ item.key }}"
+    neutron_networks: "{{ item.value }}"
     neutron_internal_networks: "{{ item.value|rejectattr('provider_network_name', 'defined')|list }}"
     neutron_external_networks: "{{ item.value|selectattr('provider_network_name', 'defined')|list }}"
-    neutron_subnets: "{{ item.value }}"
 
 - name: Check state for external networks
   tags: neutron
@@ -50,17 +50,19 @@
 
 - name: Create subnets
   tags: neutron
-  with_items: "{{ neutron_subnets }}"
+  with_subelements:
+    - "{{ neutron_networks }}"
+    - subnets
   os_subnet:
     auth: "{{ neutron_auth }}"
-    name: "{{ item.name ~ '_subnet'}}"
-    network_name: "{{ item.name }}"
-    allocation_pool_start:  "{{ item.allocation_pool.start }}"
-    allocation_pool_end: "{{ item.allocation_pool.end }}"
-    cidr: "{{ item.cidr }}"
-    dns_nameservers: "{{ item.dns_nameservers|default(omit)}}"
-    enable_dhcp: "{{ item.enable_dhcp|default(omit)}}"
-    gateway_ip: "{{ item.gateway_ip|default(omit)}}"
+    name: "{{ item.0.name ~ '_' ~ item.1.cidr }}"
+    network_name: "{{ item.0.name }}"
+    allocation_pool_start:  "{{ item.1.allocation_pool.start }}"
+    allocation_pool_end: "{{ item.1.allocation_pool.end }}"
+    cidr: "{{ item.1.cidr }}"
+    dns_nameservers: "{{ item.1.dns_nameservers|default(omit)}}"
+    enable_dhcp: "{{ item.1.enable_dhcp|default(omit)}}"
+    gateway_ip: "{{ item.1.gateway_ip|default(omit)}}"
 
 - name: Create routerports
   tags: neutron
@@ -71,4 +73,4 @@
     # Must be site unique.....
     name: "{{ neutron_auth.project_name ~ '_router_' ~ item.external_netname }}"
     network: "{{ item.external_netname }}"
-    interfaces: "{{ item.name ~ '_subnet'}}"
+    interfaces: "[{% for sn in item.subnets %}'{{ item.name ~ '_' ~ sn.cidr }}'{% if not loop.last %}, {% endif %}{% endfor %}]"
