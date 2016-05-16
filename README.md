@@ -20,23 +20,25 @@ a per project basis.
         - name: "{{ external_netname }}"
           provider_network_name: extnet
           provider_network_type: flat                # Defaults to 'flat'
-          enable_dhcp: false
-          allocation_pool:
-            start: '192.168.0.70'
-            end: '192.168.0.99'
-          gateway_ip: '192.168.0.1'
-          cidr: '192.168.0.0/24'
-          dns_nameservers:
-            - '8.8.8.8'
+          subnets:
+            - cidr: '192.168.0.0/24'
+              enable_dhcp: false
+              allocation_pool:
+                start: '192.168.0.70'
+                end: '192.168.0.99'
+              gateway_ip: '192.168.0.1'
+              dns_nameservers:
+                - '8.8.8.8'
       project1:
         - name: privnet
-          allocation_pool:
-            start: '10.0.0.2'
-            end: '10.0.0.254'
-          cidr: '10.0.0.0/24'
           external_netname: "{{ external_netname }}"
-          dns_nameservers:
-            - 8.8.8.8
+          subnets:
+            - cidr: '10.0.0.0/24'
+              allocation_pool:
+                start: '10.0.0.2'
+                end: '10.0.0.254'
+              dns_nameservers:
+                - 8.8.8.8
   roles:
     - alvaroaleman.openstack-neutron-networks
 ```
