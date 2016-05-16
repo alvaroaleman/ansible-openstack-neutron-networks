@@ -64,6 +64,8 @@
     enable_dhcp: "{{ item.1.enable_dhcp|default(omit)}}"
     gateway_ip: "{{ item.1.gateway_ip|default(omit)}}"
     ip_version: "{{ item.1.ip_version|default(omit)}}"
+    ipv6_address_mode: "{{ item.1.ipv6_address_mode|default(omit)}}"
+    ipv6_ra_mode: "{{ item.1.ipv6_ra_mode|default(omit)}}"
 
 - name: Create routerports
   tags: neutron
