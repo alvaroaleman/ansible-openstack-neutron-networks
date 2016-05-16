@@ -1,3 +1,10 @@
+# 1.1.0
+
+
+* Add description
+* Alllow defining multiple subnets per network
+
+Alvaro Aleman (2):
 # 1.0.0
 
 
