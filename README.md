@@ -3,7 +3,13 @@
 A role to idempotently configure neutron networks, subnets and routers on
 a per project basis.
 
-## Synopsis
+## Description
+
+This role creates networks, subnets and routers. If a network has the attribute
+``external_netname``, a router with ports in all subnets and a gateway port in
+``external_netname`` will be created.
+
+## Usage sample
 
 ```yaml
 - hosts: localhost
